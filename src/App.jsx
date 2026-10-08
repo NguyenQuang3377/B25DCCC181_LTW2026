@@ -2,9 +2,9 @@ import { useState } from "react";
 import "./App.css";
 
 const initialStudents = [
-  { id: 1, name: "Nguyen An", score: 8.5, class: "CTK45" },
-  { id: 2, name: "Tran Binh", score: 4.5, class: "CTK45" },
-  { id: 3, name: "Le Chi", score: 6.5, class: "CTK46" },
+  { id: 1, name: "Nguyễn Văn A", score: 8.5, class: "CTK45" },
+  { id: 2, name: "Trần Thị B", score: 4, class: "CTK45" },
+  { id: 3, name: "Lê Minh C", score: 6.5, class: "CTK46" },
 ];
 
 const filterOptions = [
@@ -13,68 +13,33 @@ const filterOptions = [
   { value: "failed", label: "Trượt (< 5)" },
 ];
 
-const SummaryCard = ({ label, value, detail }) => (
-  <article className="summary-card">
-    <span className="summary-label">{label}</span>
-    <strong className="summary-value">{value}</strong>
-    <span className="summary-detail">{detail}</span>
-  </article>
-);
+const StudentItem = ({ student, onDelete }) => {
+  const result = student.score >= 5 ? "Đạt" : "Trượt";
+  const resultClass = student.score >= 5 ? "passed" : "failed";
 
-const StudentItem = ({ student, onDelete }) => (
-  <tr>
-    <td className="student-name">{student.name}</td>
-    <td>
-      <span
-        className={`score-badge ${student.score >= 8 ? "score-good" : student.score < 5 ? "score-low" : "score-average"}`}
-      >
-        {student.score}
+  return (
+    <li className={`student-item ${resultClass}`}>
+      <span>
+        Họ tên: {student.name} - Điểm: {student.score} ({result}) - Lớp:{" "}
+        {student.class}
       </span>
-    </td>
-    <td>{student.class}</td>
-    <td className="action-cell">
-      <button
-        className="delete-button"
-        type="button"
-        onClick={() => onDelete(student.id)}
-        aria-label={`Xóa sinh viên ${student.name}`}
-      >
+      <button type="button" onClick={() => onDelete(student.id)}>
         Xóa
       </button>
-    </td>
-  </tr>
-);
+    </li>
+  );
+};
 
 const StudentList = ({ students, onDelete }) => (
-  <div className="table-scroll">
-    <table className="student-table">
-      <thead>
-        <tr>
-          <th>Họ và tên</th>
-          <th>Điểm</th>
-          <th>Lớp</th>
-          <th aria-label="Thao tác"></th>
-        </tr>
-      </thead>
-      <tbody>
-        {students.length > 0 ? (
-          students.map((student) => (
-            <StudentItem
-              key={student.id}
-              student={student}
-              onDelete={onDelete}
-            />
-          ))
-        ) : (
-          <tr>
-            <td className="empty-state" colSpan="4">
-              Không có sinh viên trong mục này.
-            </td>
-          </tr>
-        )}
-      </tbody>
-    </table>
-  </div>
+  <ul className="student-list">
+    {students.length > 0 ? (
+      students.map((student) => (
+        <StudentItem key={student.id} student={student} onDelete={onDelete} />
+      ))
+    ) : (
+      <li>Không có sinh viên trong mục này.</li>
+    )}
+  </ul>
 );
 
 const App = () => {
@@ -147,137 +112,65 @@ const App = () => {
   };
 
   return (
-    <main className="app-shell">
-      <header className="page-header">
-        <div className="header-inner">
-          <a className="brand" href="#main-content" aria-label="Trang chủ">
-            <span className="brand-mark">S</span>
-            <span>Quản lí sinh viên</span>
-          </a>
-          <span className="header-caption">QUẢN LÍ ĐIỂM SINH VIÊN</span>
+    <main className="app">
+      <h1>Xin chào!!!</h1>
+      <h2>Quản lý điểm sinh viên</h2>
+
+      <form className="student-form" onSubmit={handleSubmit} noValidate>
+        <input
+          aria-label="Tên sinh viên"
+          name="name"
+          placeholder="Tên sinh viên"
+          value={formData.name}
+          onChange={handleInputChange}
+        />
+        <input
+          aria-label="Điểm số"
+          name="score"
+          type="number"
+          min="0"
+          max="10"
+          step="0.1"
+          placeholder="Điểm số"
+          value={formData.score}
+          onChange={handleInputChange}
+        />
+        <input
+          aria-label="Lớp"
+          name="className"
+          placeholder="Lớp"
+          value={formData.className}
+          onChange={handleInputChange}
+        />
+        <button type="submit">Thêm sinh viên</button>
+      </form>
+
+      {error && (
+        <p className="form-error" role="alert">
+          {error}
+        </p>
+      )}
+
+      <section className="student-section" aria-label="Danh sách sinh viên">
+        <h3>Danh sách sinh viên</h3>
+        <div className="filter-row" aria-label="Lọc sinh viên">
+          {filterOptions.map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              aria-pressed={filter === option.value}
+              onClick={() => setFilter(option.value)}
+            >
+              {option.label}
+            </button>
+          ))}
         </div>
-      </header>
-
-      <div className="page-content" id="main-content">
-        <section className="intro-row">
-          <div>
-            <p className="eyebrow">HỒ SƠ LỚP HỌC</p>
-            <h1 className="page-title">Quản lí sinh viên</h1>
-            <p className="page-description">
-              Theo dõi danh sách và kết quả học tập của sinh viên.
-            </p>
-          </div>
-          <span className="semester-tag">Năm học 2025–2026</span>
-        </section>
-
-        <section className="summary-grid" aria-label="Thống kê toàn lớp">
-          <SummaryCard
-            label="Tổng sinh viên"
-            value={students.length}
-            detail="Trong danh sách lớp"
-          />
-          <SummaryCard
-            label="Điểm trung bình"
-            value={averageScore.toFixed(2)}
-            detail="Tính trên toàn bộ sinh viên"
-          />
-        </section>
-
-        <div className="workspace-grid">
-          <section className="form-panel" aria-labelledby="form-title">
-            <div className="section-heading">
-              <div>
-                <p className="eyebrow">CẬP NHẬT HỒ SƠ</p>
-                <h2 id="form-title">Thêm sinh viên</h2>
-              </div>
-            </div>
-
-            <form className="student-form" onSubmit={handleSubmit} noValidate>
-              <label className="field-label" htmlFor="student-name">
-                Họ và tên
-              </label>
-              <input
-                id="student-name"
-                name="name"
-                type="text"
-                placeholder="Ví dụ: Nguyen Van A"
-                value={formData.name}
-                onChange={handleInputChange}
-              />
-
-              <div className="field-row">
-                <div className="field-group">
-                  <label className="field-label" htmlFor="student-score">
-                    Điểm số
-                  </label>
-                  <input
-                    id="student-score"
-                    name="score"
-                    type="number"
-                    min="0"
-                    max="10"
-                    step="0.1"
-                    placeholder="0–10"
-                    value={formData.score}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <div className="field-group">
-                  <label className="field-label" htmlFor="student-class">
-                    Lớp
-                  </label>
-                  <input
-                    id="student-class"
-                    name="className"
-                    type="text"
-                    placeholder="Ví dụ: CTK45"
-                    value={formData.className}
-                    onChange={handleInputChange}
-                  />
-                </div>
-              </div>
-
-              {error && (
-                <p className="form-error" role="alert">
-                  {error}
-                </p>
-              )}
-
-              <button className="submit-button" type="submit">
-                Thêm sinh viên
-              </button>
-            </form>
-          </section>
-
-          <section className="list-panel" aria-labelledby="list-title">
-            <div className="list-heading">
-              <div>
-                <p className="eyebrow">DANH SÁCH LỚP</p>
-                <h2 id="list-title">Sinh viên</h2>
-              </div>
-              <span className="count-label">
-                {filteredStudents.length} kết quả
-              </span>
-            </div>
-
-            <div className="filter-row" aria-label="Lọc sinh viên">
-              {filterOptions.map((option) => (
-                <button
-                  key={option.value}
-                  className={`filter-button ${filter === option.value ? "filter-active" : ""}`}
-                  type="button"
-                  aria-pressed={filter === option.value}
-                  onClick={() => setFilter(option.value)}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-
-            <StudentList students={filteredStudents} onDelete={handleDelete} />
-          </section>
-        </div>
-      </div>
+        <StudentList students={filteredStudents} onDelete={handleDelete} />
+        <p className="statistics">
+          Tổng số sinh viên: {students.length} - Điểm trung bình cả lớp:{" "}
+          {averageScore.toFixed(2)}
+        </p>
+      </section>
     </main>
   );
 };

@@ -617,3 +617,306 @@ body {
     padding: 19px 16px;
   }
 }
+
+:root {
+  color-scheme: light;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  color: #000;
+  background: #fff;
+}
+
+body {
+  min-width: 0;
+  margin: 8px;
+  background: #fff;
+  color: #000;
+}
+
+#root {
+  width: auto;
+  max-width: none;
+  min-height: 0;
+  margin: 0;
+  border: 0;
+  display: block;
+  text-align: left;
+}
+
+.app {
+  max-width: 900px;
+}
+
+.app h1,
+.app h2,
+.app h3 {
+  color: red;
+  font-family: Arial, sans-serif;
+  font-weight: 700;
+}
+
+.app h1 {
+  margin: 10px 0 58px;
+  font-size: 32px;
+  line-height: 1.2;
+}
+
+.app h2 {
+  margin: 0 0 22px 20px;
+  font-size: 24px;
+}
+
+.app h3 {
+  margin: 18px 0 8px 20px;
+  font-size: 18px;
+}
+
+.student-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  margin: 0 0 14px 20px;
+}
+
+.student-form input {
+  box-sizing: border-box;
+  width: 177px;
+  height: 22px;
+  margin: 0;
+  padding: 1px 3px;
+  border: 1px solid #888;
+  border-radius: 0;
+  background: #fff;
+  color: #000;
+  font:
+    13px Arial,
+    sans-serif;
+}
+
+.student-form button,
+.filter-row button,
+.student-item button {
+  color: #000;
+  font:
+    13px Arial,
+    sans-serif;
+  cursor: pointer;
+}
+
+.student-form button {
+  min-height: 22px;
+  padding: 1px 6px;
+}
+
+.form-error {
+  margin: 0 0 12px 20px;
+  color: red;
+  font-size: 14px;
+}
+
+.student-section {
+  margin-left: 20px;
+}
+
+.student-section h3 {
+  margin-left: 0;
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+
+.student-list {
+  margin: 0;
+  padding-left: 40px;
+}
+
+.student-item {
+  margin-bottom: 2px;
+  line-height: 1.4;
+}
+
+.student-item.passed {
+  color: green;
+}
+
+.student-item.failed {
+  color: red;
+}
+
+.student-item button {
+  margin-left: 8px;
+}
+
+.statistics {
+  margin-top: 14px;
+}
+
+@media (max-width: 600px) {
+  .app h1 {
+    margin-bottom: 42px;
+  }
+
+  .student-form input {
+    width: calc(50% - 1px);
+  }
+}
+:root {
+  color-scheme: light;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  line-height: normal;
+  letter-spacing: 0;
+  color: #111;
+  background: #fff;
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  background: #fff;
+  color: #111;
+}
+
+#root {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  border: 0;
+  text-align: left;
+}
+
+.app {
+  padding: 1px 0 24px;
+}
+
+.app h1 {
+  margin: 12px 0 62px;
+  color: red;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.app h2 {
+  margin: 0 20px 22px;
+  color: red;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.student-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+  margin-left: 20px;
+}
+
+.student-form input {
+  width: 177px;
+  height: 22px;
+  margin: 0;
+  padding: 1px 3px;
+  border: 1px solid #888;
+  border-radius: 0;
+  background: #fff;
+  color: #111;
+  font:
+    13px Arial,
+    sans-serif;
+}
+
+.student-form input:focus {
+  outline: auto;
+}
+
+.student-form button,
+.filter-row button,
+.student-item button {
+  min-height: 22px;
+  padding: 1px 6px;
+  border: 1px solid #888;
+  border-radius: 2px;
+  background: #efefef;
+  color: #111;
+  font:
+    13px Arial,
+    sans-serif;
+  cursor: pointer;
+}
+
+.form-error {
+  margin: 8px 20px;
+  color: red;
+}
+
+.student-section {
+  margin: 24px 20px;
+}
+
+.student-section h3 {
+  margin: 0 0 12px;
+  font-size: 18px;
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 10px 0;
+}
+
+.filter-row button[aria-pressed="true"] {
+  border-color: #555;
+  background: #ddd;
+}
+
+.student-list {
+  margin: 14px 0;
+  padding-left: 40px;
+}
+
+.student-item {
+  margin: 4px 0;
+}
+
+.student-item.passed {
+  color: green;
+}
+
+.student-item.failed {
+  color: red;
+}
+
+.student-item.average {
+  color: #333;
+}
+
+.student-item button {
+  margin-left: 8px;
+}
+
+.statistics {
+  margin: 16px 0;
+}
+
+@media (max-width: 620px) {
+  .app h1 {
+    margin-bottom: 42px;
+  }
+
+  .student-form {
+    gap: 4px;
+  }
+
+  .student-form input {
+    width: min(177px, calc(100vw - 40px));
+  }
+}
