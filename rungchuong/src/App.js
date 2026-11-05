@@ -7,6 +7,8 @@ import History from './pages/History';
 import NotFound from './pages/NotFound';
 import QuestionBank from './pages/QuestionBank';
 import QuestionDetail from './pages/QuestionDetail';
+import Play from './pages/Play';
+import Result from './pages/Result';
 import './App.css';
 
 const App = () => {
@@ -14,6 +16,7 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [reloadToken, setReloadToken] = useState(0);
+  const [playerName, setPlayerName] = useState('');
 
   useEffect(() => {
     const controller = new AbortController();
@@ -56,12 +59,16 @@ const App = () => {
     loading,
     error,
     retryLoadingQuestions,
+    playerName,
+    setPlayerName,
   };
 
   return (
     <Routes>
       <Route path="/" element={<Layout outletContext={outletContext} />}>
         <Route index element={<Home />} />
+        <Route path="play" element={<Play />} />
+        <Route path="result" element={<Result />} />
         <Route path="questions" element={<QuestionBank />} />
         <Route path="questions/:id" element={<QuestionDetail />} />
         <Route path="history" element={<History />} />

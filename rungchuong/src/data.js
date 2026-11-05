@@ -9,3 +9,14 @@ export const LEVELS = {
 export const TOPICS = ['HTML', 'CSS', 'JavaScript', 'React'];
 
 export const LETTERS = ['A', 'B', 'C', 'D'];
+
+export const TIME_PER_QUESTION = 20;
+
+export const EXTRA_TIME = 15;
+
+export const RANKS = [
+  { min: 300, title: 'Rung chuông vàng' },
+  { min: 200, title: 'Xuất sắc' },
+  { min: 100, title: 'Khá' },
+  { min: 0, title: 'Cần cố gắng' },
+];

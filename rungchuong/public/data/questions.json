@@ -28,7 +28,7 @@
     "topic": "JavaScript",
     "level": 1,
     "question": "Kết quả của biểu thức typeof 'hello' là gì?",
-    "options": ["text", "char", "object", "string"],
+    "options": ["text", "Char", "object", "string"],
     "answer": 3
   },
   {
