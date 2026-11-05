@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import axios from 'axios';
 import Layout from './components/Layout';
@@ -9,6 +9,8 @@ import QuestionBank from './pages/QuestionBank';
 import QuestionDetail from './pages/QuestionDetail';
 import Play from './pages/Play';
 import Result from './pages/Result';
+import { HISTORY_STORAGE_KEY } from './data';
+import { getRank, readHistory } from './utils';
 import './App.css';
 
 const App = () => {
@@ -17,6 +19,43 @@ const App = () => {
   const [error, setError] = useState('');
   const [reloadToken, setReloadToken] = useState(0);
   const [playerName, setPlayerName] = useState('');
+  const [historyState, setHistoryState] = useState(readHistory);
+  const [historyError, setHistoryError] = useState(historyState.error);
+  const historyNeedsSave = useRef(false);
+
+  useEffect(() => {
+    if (!historyNeedsSave.current) {
+      return;
+    }
+
+    try {
+      window.localStorage.setItem(
+        HISTORY_STORAGE_KEY,
+        JSON.stringify(historyState.history),
+      );
+      setHistoryError('');
+      historyNeedsSave.current = false;
+    } catch (storageError) {
+      setHistoryError(
+        storageError instanceof Error
+          ? storageError.message
+          : 'Không thể lưu lịch sử vào bộ nhớ trình duyệt.',
+      );
+    }
+  }, [historyState.history]);
+
+  const addHistoryEntry = useCallback((entry) => {
+    historyNeedsSave.current = true;
+    setHistoryState((currentState) => ({
+      history: [entry, ...currentState.history],
+      error: '',
+    }));
+  }, []);
+
+  const clearHistory = useCallback(() => {
+    historyNeedsSave.current = true;
+    setHistoryState({ history: [], error: '' });
+  }, []);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -61,6 +100,25 @@ const App = () => {
     retryLoadingQuestions,
     playerName,
     setPlayerName,
+    history: historyState.history,
+    historyError,
+    addHistoryEntry,
+    clearHistory,
+    getHighScore: () =>
+      historyState.history.reduce(
+        (highest, entry) => Math.max(highest, entry.score),
+        0,
+      ),
+    getHighScoreName: () =>
+      historyState.history.find(
+        (entry) =>
+          entry.score ===
+          historyState.history.reduce(
+            (highest, current) => Math.max(highest, current.score),
+            0,
+          ),
+      )?.name ?? '',
+    getRank,
   };
 
   return (

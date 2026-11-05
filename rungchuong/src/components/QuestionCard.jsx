@@ -7,6 +7,7 @@ const QuestionCard = ({
   totalQuestions,
   selectedAnswer,
   answerState,
+  hiddenOptions = [],
   onSelectAnswer,
 }) => {
   const revealed = answerState === 'revealed';
@@ -28,6 +29,7 @@ const QuestionCard = ({
           <AnswerButton
             correct={index === question.answer}
             disabled={disabled}
+            hidden={hiddenOptions.includes(index)}
             index={index}
             key={`${question.id}-${index}`}
             onSelect={onSelectAnswer}

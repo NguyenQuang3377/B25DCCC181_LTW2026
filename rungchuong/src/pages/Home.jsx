@@ -1,11 +1,28 @@
 import { useState } from 'react';
 import { Link, useNavigate, useOutletContext } from 'react-router-dom';
+import { POINTS, TOPICS } from '../data';
 
 const Home = () => {
   const navigate = useNavigate();
-  const { playerName, setPlayerName } = useOutletContext();
+  const {
+    playerName,
+    setPlayerName,
+    questions,
+    loading,
+    getHighScore,
+    getHighScoreName,
+  } = useOutletContext();
   const [nameInput, setNameInput] = useState(playerName);
-  const trimmedName = nameInput.trim();
+  const [selectedTopic, setSelectedTopic] = useState('all');
+  const trimmedName = nameInput.trim().normalize('NFC');
+  const selectedQuestions =
+    selectedTopic === 'all'
+      ? questions
+      : questions.filter((question) => question.topic === selectedTopic);
+  const maximumScore = selectedQuestions.reduce(
+    (score, question) => score + POINTS[question.level] + 5,
+    0,
+  );
 
   const handleStart = (event) => {
     event.preventDefault();
@@ -14,7 +31,7 @@ const Home = () => {
     }
 
     setPlayerName(trimmedName);
-    navigate('/play');
+    navigate('/play', { state: { topic: selectedTopic } });
   };
 
   return (
@@ -26,8 +43,11 @@ const Home = () => {
         <p className="eyebrow">SẴN SÀNG THỬ THÁCH?</p>
         <h1>Rung chuông vàng</h1>
         <p className="hero-description">
-          Trả lời 15 câu hỏi về HTML, CSS, JavaScript và React. Mỗi câu có 20
-          giây — trả lời đúng để tiếp tục chinh phục đỉnh cao.
+          {selectedTopic === 'all'
+            ? `Trả lời ${loading ? 'các' : selectedQuestions.length} câu hỏi về HTML, CSS, JavaScript và React.`
+            : `Chủ đề ${selectedTopic} có ${selectedQuestions.length} câu hỏi.`}{' '}
+          Mỗi câu có 20 giây — dùng quyền trợ giúp đúng lúc để tiếp tục chinh
+          phục đỉnh cao.
         </p>
         <form className="player-form" onSubmit={handleStart}>
           <label className="player-name-field" htmlFor="player-name">
@@ -42,6 +62,21 @@ const Home = () => {
               value={nameInput}
             />
           </label>
+          <label className="player-name-field" htmlFor="play-topic">
+            Chủ đề thi
+            <select
+              id="play-topic"
+              onChange={(event) => setSelectedTopic(event.target.value)}
+              value={selectedTopic}
+            >
+              <option value="all">Tất cả chủ đề</option>
+              {TOPICS.map((topic) => (
+                <option key={topic} value={topic}>
+                  {topic}
+                </option>
+              ))}
+            </select>
+          </label>
           <button
             className="button button-primary"
             disabled={!trimmedName}
@@ -53,12 +88,20 @@ const Home = () => {
         <Link className="home-bank-link" to="/questions">
           Xem ngân hàng câu hỏi
         </Link>
+        <p className="home-record">
+          Kỷ lục:{' '}
+          {getHighScore() > 0
+            ? `${getHighScore()} điểm${getHighScoreName() ? ` – ${getHighScoreName()}` : ''}`
+            : 'chưa có lượt chơi nào'}
+        </p>
       </div>
       <div className="home-info-grid">
         <article className="info-card">
-          <span className="info-number">15</span>
+          <span className="info-number">
+            {loading ? '…' : selectedQuestions.length}
+          </span>
           <h2>Câu hỏi</h2>
-          <p>Trả lời lần lượt 15 câu để chinh phục chuông vàng.</p>
+          <p>Số câu trong chủ đề đã chọn.</p>
         </article>
         <article className="info-card">
           <span className="info-number">20</span>
@@ -66,9 +109,9 @@ const Home = () => {
           <p>Chọn đáp án trước khi đồng hồ đếm ngược về không.</p>
         </article>
         <article className="info-card">
-          <span className="info-number">300</span>
+          <span className="info-number">{maximumScore}</span>
           <h2>Điểm tối đa</h2>
-          <p>Câu khó có giá trị cao hơn: 10, 20 hoặc 30 điểm.</p>
+          <p>Đã tính tối đa 5 điểm thưởng tốc độ mỗi câu.</p>
         </article>
       </div>
     </section>

@@ -20,3 +20,5 @@ export const RANKS = [
   { min: 100, title: 'Khá' },
   { min: 0, title: 'Cần cố gắng' },
 ];
+
+export const HISTORY_STORAGE_KEY = 'ltw_rcv_history';

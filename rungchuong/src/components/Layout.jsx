@@ -9,6 +9,11 @@ const Layout = ({ outletContext }) => (
         <NavBar />
       </div>
     </header>
+    {outletContext.historyError && (
+      <div className="storage-notice" role="alert">
+        Không thể đồng bộ lịch sử: {outletContext.historyError}
+      </div>
+    )}
     <main className="page-content">
       <Outlet context={outletContext} />
     </main>
